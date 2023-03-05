@@ -1,4 +1,4 @@
-data = open("data.txt", "r")
+data = open("Day1/data.txt", "r")
 
 elves = []
 currentCals = 0
@@ -14,5 +14,6 @@ for line in data:
     elves[index] += int(line)
 
 elves.sort(reverse=True)
-print(elves[0], elves[1], elves[2])
-print(elves[0] + elves[1] + elves[2])
+
+print("part 1:", elves[0])
+print("part 2:", elves[0] + elves[1] + elves[2])
