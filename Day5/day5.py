@@ -62,9 +62,6 @@ def part1():
     data = open("Day5/data.txt", "r")
 
     print("part 1:")
-    # Every item in the range is a tuple of a low and high range.
-    # Need to look at each pair, and see if one is a superset of the other.
-
     crateRows = []
     for line in data:
         crateIndexLineReached = line[1] == '1'
@@ -87,11 +84,7 @@ def part1():
 
 def part2():
     data = open("Day5/data.txt", "r")
-
-    print("part 1:")
-    # Every item in the range is a tuple of a low and high range.
-    # Need to look at each pair, and see if one is a superset of the other.
-
+    print("part 2:")
     crateRows = []
     for line in data:
         crateIndexLineReached = line[1] == '1'
