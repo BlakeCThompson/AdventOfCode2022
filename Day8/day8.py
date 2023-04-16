@@ -1,12 +1,3 @@
-class Point:
-    xCoord: int
-    yCoord: int
-
-    def __init__(self, xCoord: int, yCoord: int):
-        self.xCoord = xCoord
-        self.yCoord = yCoord
-
-
 class Grid:
     def __init__(self, rows: list):
         self.rows = rows
@@ -60,30 +51,29 @@ def getTreeGrid(fileName: str):
 def isVisibleFromOutsideTheGrid(row, column, grid):
     if isHigherThanAllWest(row, column, grid):
         return True
-    # if isHigherThanAllNorth(point, grid):
-    #     return True
-    # if isHigherThanAllEast(point, grid):
-    #     return True
-    # if isHigherThanAllSouth(point, grid):
-    #     return True
+    if isHigherThanAllNorth(row, column, grid):
+        return True
+    if isHigherThanAllEast(row, column, grid):
+        return True
+    if isHigherThanAllSouth(row, column, grid):
+        return True
     return False
 
 
 def getNumberOfTreesVisibleFromOutsideSquareGrid(grid):
-    numberOfTreesAroundEdges = len(grid) * 2 + len(grid[0]) * 2 - 4
+    numberOfTreesVisibleFromOutsideSquareGrid = len(grid) * 2 + len(grid[0]) * 2 - 4
     rows = len(grid)
-    xValue = 1
+    row = 1
     for rowOfTrees in grid[1:rows - 1]:
         numberOfTreesInRow = len(rowOfTrees)
-        yValue = 1
-        for tree in rowOfTrees[1:numberOfTreesInRow - 1]:
-            point = Point(xValue, yValue)
-            yValue += 1
-            if isVisibleFromOutsideTheGrid(xValue, yValue, grid):
-                print(point.xCoord, point.yCoord)
-                numberOfTreesAroundEdges += 1
-        xValue += 1
-    return numberOfTreesAroundEdges
+        column = 0
+        for _ in rowOfTrees[1:numberOfTreesInRow - 1]:
+            column += 1
+            if isVisibleFromOutsideTheGrid(row, column, grid):
+                print(row, column)
+                numberOfTreesVisibleFromOutsideSquareGrid += 1
+        row += 1
+    return numberOfTreesVisibleFromOutsideSquareGrid
 
 
 def part1(fileName):
@@ -92,5 +82,5 @@ def part1(fileName):
     print("number of trees visible from outside square grid: " + str(numberOfTreesVisibleFromOutsideSquareGrid))
 
 
-file = 'Day8/testData.txt'
+file = 'Day8/data.txt'
 part1(file)
