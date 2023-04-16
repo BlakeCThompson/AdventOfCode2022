@@ -1,34 +1,47 @@
-
 class Point:
     xCoord: int
     yCoord: int
+
     def __init__(self, xCoord: int, yCoord: int):
         self.xCoord = xCoord
         self.yCoord = yCoord
 
 
-def isHigherThanAllWest(point: Point, grid):
-    pointOfInterestValue = grid[point.yCoord][point.xCoord]
-    for valueToTheWest in grid[point.yCoord][1:point.xCoord - 1]:
-        if valueToTheWest >= pointOfInterestValue:
+class Grid:
+    def __init__(self, rows: list):
+        self.rows = rows
+
+
+def isHigherThanAllWest(row, column, grid):
+    pointOfInterestValue = grid[row][column]
+    for valueToTheWest in grid[row][0: column]:
+        if int(valueToTheWest) >= int(pointOfInterestValue):
             return False
     return True
 
 
-def isHigherThanAllEast(point: Point, grid):
-    pointOfInterestValue = grid[point.yCoord][point.xCoord]
-
-    for valueToTheWest in grid[point.yCoord][point.xCoord - 1:len(grid) - 1]:
-        if valueToTheWest >= pointOfInterestValue:
+def isHigherThanAllEast(row, column, grid):
+    pointOfInterestValue = grid[row][column]
+    for valueToTheEast in grid[row][column + 1:]:
+        if int(valueToTheEast) >= int(pointOfInterestValue):
             return False
+    return True
 
 
-def isHigherThanAllNorth(point: Point, grid):
-    pass
+def isHigherThanAllNorth(row, column, grid):
+    pointOfInterestValue = grid[row][column]
+    for r in grid[0:row]:
+        if r[column] >= pointOfInterestValue:
+            return False
+    return True
 
 
-def isHigherThanAllSouth(point: Point, grid):
-    pass
+def isHigherThanAllSouth(row, column, grid):
+    pointOfInterestValue = grid[row][column]
+    for r in grid[row + 1:]:
+        if r[column] >= pointOfInterestValue:
+            return False
+    return True
 
 
 def getTreeGrid(fileName: str):
@@ -44,20 +57,20 @@ def getTreeGrid(fileName: str):
     return treeGrid
 
 
-def isVisibleFromOutsideTheGrid(point: Point, grid):
-    if isHigherThanAllWest(point, grid):
+def isVisibleFromOutsideTheGrid(row, column, grid):
+    if isHigherThanAllWest(row, column, grid):
         return True
-    if isHigherThanAllNorth(point, grid):
-        return True
-    if isHigherThanAllEast(point, grid):
-        return True
-    if isHigherThanAllSouth(point, grid):
-        return True
+    # if isHigherThanAllNorth(point, grid):
+    #     return True
+    # if isHigherThanAllEast(point, grid):
+    #     return True
+    # if isHigherThanAllSouth(point, grid):
+    #     return True
     return False
 
 
 def getNumberOfTreesVisibleFromOutsideSquareGrid(grid):
-    numberOfTreesAroundEdges = len(grid)*2 + len(grid[0])*2 - 4
+    numberOfTreesAroundEdges = len(grid) * 2 + len(grid[0]) * 2 - 4
     rows = len(grid)
     xValue = 1
     for rowOfTrees in grid[1:rows - 1]:
@@ -65,7 +78,9 @@ def getNumberOfTreesVisibleFromOutsideSquareGrid(grid):
         yValue = 1
         for tree in rowOfTrees[1:numberOfTreesInRow - 1]:
             point = Point(xValue, yValue)
-            if isVisibleFromOutsideTheGrid(point, grid):
+            yValue += 1
+            if isVisibleFromOutsideTheGrid(xValue, yValue, grid):
+                print(point.xCoord, point.yCoord)
                 numberOfTreesAroundEdges += 1
         xValue += 1
     return numberOfTreesAroundEdges
@@ -75,7 +90,6 @@ def part1(fileName):
     grid = getTreeGrid(fileName)
     numberOfTreesVisibleFromOutsideSquareGrid = getNumberOfTreesVisibleFromOutsideSquareGrid(grid)
     print("number of trees visible from outside square grid: " + str(numberOfTreesVisibleFromOutsideSquareGrid))
-
 
 
 file = 'Day8/testData.txt'
