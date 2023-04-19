@@ -27,7 +27,6 @@ class TestDay8(unittest.TestCase):
         highPointIsHigherThanAnyToTheEast = day8.isHigherThanAllEast(3, 2, grid)
         self.assertTrue(highPointIsHigherThanAnyToTheEast)
 
-
     def test_isHigherThanAllNorth(self):
         grid = [[1, 2, 3, 4, 5],
                 [2, 2, 3, 4, 5],
@@ -38,7 +37,6 @@ class TestDay8(unittest.TestCase):
 
         lowPointIsHigherThanAnyToTheNorth = day8.isHigherThanAllNorth(2, 3, grid)
         self.assertFalse(lowPointIsHigherThanAnyToTheNorth)
-
 
     def test_isHigherThanAllSouth(self):
         grid = [[1, 2, 3, 4, 5],
@@ -79,7 +77,6 @@ class TestDay8(unittest.TestCase):
         shouldBeOne = day8.getNumberOfTreesVisibleToEastOf(0, 3, grid)
         self.assertEquals(shouldBeOne, 1)
 
-
     def test_getNumberOfTreesVisibleToSouthOf(self):
         grid = [[1, 6, 3, 4, 5],
                 [2, 2, 3, 4, 5],
@@ -93,6 +90,42 @@ class TestDay8(unittest.TestCase):
         self.assertEquals(shouldBeOne, 1)
         shouldBeOne = day8.getNumberOfTreesVisibleToSouthOf(0, 3, grid)
         self.assertEquals(shouldBeOne, 1)
+
+    def test_getNumberOfTreesVisibleToWestOf(self):
+        grid = [[1, 6, 3, 4, 5],
+                [2, 2, 3, 4, 5],
+                [6, 5, 2, 3, 4],
+                [1, 3, 6, 1, 2]]
+        shouldBeTwo = day8.getNumberOfTreesVisibleToWestOf(1, 2, grid)
+        self.assertEquals(shouldBeTwo, 2)
+        shouldBeThree = day8.getNumberOfTreesVisibleToWestOf(2, 4, grid)
+        self.assertEquals(shouldBeThree, 3)
+        shouldBeOne = day8.getNumberOfTreesVisibleToWestOf(1, 1, grid)
+        self.assertEquals(shouldBeOne, 1)
+        shouldBeOne = day8.getNumberOfTreesVisibleToWestOf(2, 2, grid)
+        self.assertEquals(shouldBeOne, 1)
+
+    def test_getScenicScore(self):
+        grid = [[3, 0, 3, 7, 3],
+                [2, 5, 5, 1, 2],
+                [6, 5, 3, 3, 2],
+                [3, 3, 5, 4, 9],
+                [3, 5, 3, 9, 0]]
+        score = day8.getScenicScore(3, 2, grid)
+        self.assertEquals(8, score)
+        score = day8.getScenicScore(0, 3, grid)
+        self.assertEquals(12, score)
+
+    def test_getTreeHavingHighestScenicScore(self):
+        grid = [[3, 0, 3, 7, 3],
+                [2, 5, 5, 1, 2],
+                [6, 5, 3, 3, 2],
+                [3, 3, 5, 4, 9],
+                [3, 5, 3, 9, 0]]
+        tree, score = day8.getTreeHavingHighestScenicScore(grid)
+        self.assertEquals(8, score)
+        self.assertEquals(3, tree[0])
+        self.assertEquals(2, tree[1])
 
 if __name__ == '__main__':
     unittest.main()
