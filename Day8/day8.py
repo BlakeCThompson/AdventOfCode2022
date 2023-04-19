@@ -82,5 +82,65 @@ def part1(fileName):
     print("number of trees visible from outside square grid: " + str(numberOfTreesVisibleFromOutsideSquareGrid))
 
 
+def getNumberOfTreesVisibleToNorthOf(row, column, grid):
+    pointOfInterestValue = grid[row][column]
+    numberOfTreesVisible = 0
+    for r in grid[row-1::-1]:
+        comparedTree = r[column]
+        numberOfTreesVisible += 1
+        if comparedTree >= pointOfInterestValue:
+            return numberOfTreesVisible
+    return numberOfTreesVisible
+
+
+def getNumberOfTreesVisibleToEastOf(row, column, grid):
+    pointOfInterestValue = grid[row][column]
+    numberOfTreesVisible = 0
+    for tree in grid[row][column + 1:]:
+        comparedTree = tree
+        numberOfTreesVisible += 1
+        if comparedTree >= pointOfInterestValue:
+            return numberOfTreesVisible
+    return numberOfTreesVisible
+
+
+def getNumberOfTreesVisibleToSouthOf(row, column, grid):
+    pointOfInterestValue = grid[row][column]
+    numberOfTreesVisible = 0
+    for r in grid[row + 1:]:
+        comparedTree = r[column]
+        numberOfTreesVisible += 1
+        if comparedTree >= pointOfInterestValue:
+            return numberOfTreesVisible
+    return numberOfTreesVisible
+
+def getScenicScore(row, column, grid):
+    treesVisibleToNorth = getNumberOfTreesVisibleToNorthOf(row, column, grid)
+    # treesVisibleToEast = getNumberOfTreesVisibleToEastOf(row, column, grid)
+    # treesVisibleToSouth = getNumberOfTreesVisibleToSouthOf(row, column, grid)
+    # treesVisibleToWest = getNumberOfTreesVisibleToWestOf(row, column, grid)
+    # return treesVisibleToNorth * treesVisibleToEast * treesVisibleToSouth * treesVisibleToWest
+    return treesVisibleToNorth
+
+
+def getTreeHavingHighestScenicScore(grid):
+    highestScenicScore = 0
+    highestScenicScoreTree = []
+    rowNumber = 0
+    for r in grid:
+        colNumber = 0
+        for c in r:
+            scenicScore = getScenicScore(rowNumber, colNumber, grid)
+            if scenicScore > highestScenicScore:
+                highestScenicScoreTree = (rowNumber, colNumber)
+                highestScenicScore = scenicScore
+    return highestScenicScoreTree, highestScenicScore
+
+
+def part2(fileName):
+    grid = getTreeGrid(fileName)
+    treeWithBestScenicScore = getTreeHavingHighestScenicScore(grid)
+    print(treeWithBestScenicScore[0], ' ', treeWithBestScenicScore[1])
+
 file = 'Day8/data.txt'
 part1(file)

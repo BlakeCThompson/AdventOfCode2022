@@ -51,6 +51,48 @@ class TestDay8(unittest.TestCase):
         lowPointIsHigherThanAnyToTheSouth = day8.isHigherThanAllSouth(1, 2, grid)
         self.assertFalse(lowPointIsHigherThanAnyToTheSouth)
 
+    def test_getNumberOfTreesVisibleToNorthOf(self):
+        grid = [[1, 2, 3, 4, 5],
+                [2, 2, 3, 4, 5],
+                [6, 5, 2, 3, 4],
+                [1, 3, 6, 1, 2]]
+        shouldBeTwo = day8.getNumberOfTreesVisibleToNorthOf(2, 1, grid)
+        self.assertEquals(shouldBeTwo, 2)
+        shouldBeThree = day8.getNumberOfTreesVisibleToNorthOf(3, 2, grid)
+        self.assertEquals(shouldBeThree, 3)
+        shouldBeOne = day8.getNumberOfTreesVisibleToNorthOf(1, 2, grid)
+        self.assertEquals(shouldBeOne, 1)
+        shouldBeOne = day8.getNumberOfTreesVisibleToNorthOf(2, 4, grid)
+        self.assertEquals(shouldBeOne, 1)
+
+    def test_getNumberOfTreesVisibleToEastOf(self):
+        grid = [[1, 2, 3, 4, 5],
+                [2, 2, 3, 4, 5],
+                [6, 5, 2, 3, 4],
+                [1, 3, 6, 1, 2]]
+        shouldBeTwo = day8.getNumberOfTreesVisibleToEastOf(3, 2, grid)
+        self.assertEquals(shouldBeTwo, 2)
+        shouldBeThree = day8.getNumberOfTreesVisibleToEastOf(2, 1, grid)
+        self.assertEquals(shouldBeThree, 3)
+        shouldBeOne = day8.getNumberOfTreesVisibleToEastOf(1, 3, grid)
+        self.assertEquals(shouldBeOne, 1)
+        shouldBeOne = day8.getNumberOfTreesVisibleToEastOf(0, 3, grid)
+        self.assertEquals(shouldBeOne, 1)
+
+
+    def test_getNumberOfTreesVisibleToSouthOf(self):
+        grid = [[1, 6, 3, 4, 5],
+                [2, 2, 3, 4, 5],
+                [6, 5, 2, 3, 4],
+                [1, 3, 6, 1, 2]]
+        shouldBeTwo = day8.getNumberOfTreesVisibleToSouthOf(1, 4, grid)
+        self.assertEquals(shouldBeTwo, 2)
+        shouldBeThree = day8.getNumberOfTreesVisibleToSouthOf(0, 1, grid)
+        self.assertEquals(shouldBeThree, 3)
+        shouldBeOne = day8.getNumberOfTreesVisibleToSouthOf(1, 1, grid)
+        self.assertEquals(shouldBeOne, 1)
+        shouldBeOne = day8.getNumberOfTreesVisibleToSouthOf(0, 3, grid)
+        self.assertEquals(shouldBeOne, 1)
 
 if __name__ == '__main__':
     unittest.main()
