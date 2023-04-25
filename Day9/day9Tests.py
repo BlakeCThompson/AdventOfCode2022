@@ -14,14 +14,14 @@ class TestDay9(unittest.TestCase):
         tailCoords = day9.Coordinates(0, 0)
         head = day9.Coordinates(2, 0)
 
-        tail = day9.Tail(tailCoords)
+        tail = day9.Knot(tailCoords)
         day9.moveTailIfNecessary(head, tail)
         self.assertEqual(2, tail.getVisitedCount())
         self.assertListEqual([(0, 0), (1, 0)], tail.visitedCoordinates)
 
     def testHeadIsMoreThanXAwayHorizontally(self):
         tailCoords = day9.Coordinates(0, 0)
-        tail = day9.Tail(tailCoords)
+        tail = day9.Knot(tailCoords)
         head = day9.Coordinates(0, 2)
         self.assertFalse(day9.headIsMoreThanXSpaceAwayHorizontally(head, tail, 1))
         head.xPosition = 2
@@ -36,7 +36,7 @@ class TestDay9(unittest.TestCase):
 
     def testHeadIsMoreThanXAwayVertically(self):
         tailCoords = day9.Coordinates(0, 0)
-        tail = day9.Tail(tailCoords)
+        tail = day9.Knot(tailCoords)
         head = day9.Coordinates(2, 0)
         self.assertFalse(day9.headIsMoreThanXSpaceAwayVertically(head, tail, 1))
         head.xPosition = 0
@@ -52,7 +52,7 @@ class TestDay9(unittest.TestCase):
 
     def testMoveTailIfNecessaryFollowsNorthWest(self):
         tailCoords = day9.Coordinates(4, 4)
-        tail = day9.Tail(tailCoords)
+        tail = day9.Knot(tailCoords)
         head = day9.Coordinates(2, 5)
 
         day9.moveTailIfNecessary(head, tail)
@@ -61,7 +61,7 @@ class TestDay9(unittest.TestCase):
 
     def testMoveTailIfNecessaryFollowsNorth(self):
         tailCoords = day9.Coordinates(4, 4)
-        tail = day9.Tail(tailCoords)
+        tail = day9.Knot(tailCoords)
         head = day9.Coordinates(4, 6)
 
         day9.moveTailIfNecessary(head, tail)
