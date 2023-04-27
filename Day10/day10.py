@@ -7,9 +7,6 @@ class Command(ABC):
     def __init__(self, value):
         pass
 
-    def getCycles(self):
-        return self.numCycles
-
     def execute(self, cpu: CPU):
         pass
 
@@ -71,10 +68,42 @@ def part1(fileName):
     commandLines.close()
 
 
+def spriteOverLapsWithCurrentClockTick(spriteCenter: int, spriteLengthOnEitherSideOfCenter: int, tickNumber: int):
+    leftSideOfSprite = spriteCenter - spriteLengthOnEitherSideOfCenter
+    rightSideOfSprite = spriteCenter + spriteLengthOnEitherSideOfCenter
+    return leftSideOfSprite <= tickNumber <= rightSideOfSprite
+
+
+def renderImage(cpuStates: list, spriteSize=3, screenPixelWidth=40):
+    spriteSizeOnEitherSideOfCenter = int(spriteSize / 2)
+    stringRepresentationOfRenderedImage = ''
+    for tickNumber, xRegisterValue in enumerate(cpuStates):
+        tickNumber = tickNumber
+        tickNumber = tickNumber % screenPixelWidth
+        if tickNumber % screenPixelWidth == 0:
+            stringRepresentationOfRenderedImage += '\n'
+        if spriteOverLapsWithCurrentClockTick(xRegisterValue, spriteSizeOnEitherSideOfCenter, tickNumber):
+            stringRepresentationOfRenderedImage += '#'
+        else:
+            stringRepresentationOfRenderedImage += '.'
+    return stringRepresentationOfRenderedImage
+
+
 def part2(fileName):
-    pass
+    commandLines = open(fileName, "r")
+    cpu = CPU()
+    for commandLine in commandLines:
+        command = commandFactory(commandLine)
+        cpu.executeCommand(command)
+    commandLines.close()
+
+    spriteSize = 3
+    screenPixelWidth = 40
+    stringImage = renderImage(cpu.states, spriteSize, screenPixelWidth)
+    print(stringImage)
 
 
+# file = 'Day10/testData.txt'
 file = 'Day10/data.txt'
-part1(file)
-# part2(file)
+# part1(file)
+part2(file)
