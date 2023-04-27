@@ -105,5 +105,5 @@ def part2(fileName):
 
 # file = 'Day10/testData.txt'
 file = 'Day10/data.txt'
-# part1(file)
+part1(file)
 part2(file)
