@@ -64,6 +64,23 @@ def parseGrid(fileName):
     return rows
 
 
+def getEnd(grid):
+    for rowIndex, row in enumerate(grid):
+        for colIndex, col in enumerate(row):
+            if col == 'E':
+                return rowIndex, colIndex
+def getDistanceBetweenCoordinates(start, end):
+    # Get the row and column indices for the start and end coordinates
+    start_row, start_col = start
+    end_row, end_col = end
+
+    # Calculate the difference in rows and columns
+    row_diff = abs(start_row - end_row)
+    col_diff = abs(start_col - end_col)
+
+    # Return the total distance (number of moves)
+    return row_diff + col_diff
+
 def part1(fileName: str):
     ioStream = open(fileName, 'r')
     pass

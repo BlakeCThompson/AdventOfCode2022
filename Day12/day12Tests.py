@@ -28,6 +28,23 @@ class Day12Tests(unittest.TestCase):
         self.assertEqual(5, day12.countCharsBetweenChars('p', 'j'))
 
 
+    def testGetDistanceFromEnd(self):
+        grid = [
+            ['S', 'a', 'b', 'q', 'p', 'o', 'n', 'm'],
+            ['a', 'b', 'c', 'r', 'y', 'x', 'x', 'l'],
+            ['a', 'c', 'c', 's', 'z', 'E', 'x', 'k'],
+            ['a', 'c', 'c', 't', 'u', 'v', 'w', 'j'],
+            ['a', 'b', 'd', 'e', 'f', 'g', 'h', 'i']
+        ]
+        end = day12.getEnd(grid)
+        self.assertEqual(end, (2, 5))
+        distanceFromEnd = day12.getDistanceBetweenCoordinates((2, 0), end)
+        self.assertEqual(distanceFromEnd, 5)
+        distanceFromEnd = day12.getDistanceBetweenCoordinates((4, 5), end)
+        self.assertEqual(distanceFromEnd, 2)
+        distanceFromEnd = day12.getDistanceBetweenCoordinates((0, 1), end)
+        self.assertEqual(distanceFromEnd, 6)
+
     def testGetMoveOptions(self):
         grid = [
             ['S', 'a', 'b', 'q', 'p', 'o', 'n', 'm'],
