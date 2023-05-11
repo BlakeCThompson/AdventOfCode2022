@@ -141,9 +141,9 @@ class TestDay11(unittest.TestCase):
         monkeyGroup.addMonkey(monkey1)
         monkeyGroup.addMonkey(monkey2)
         monkeyGroup.executeOnAll()
-        self.assertEqual(monkeyGroup.monkeys[0].inspectedItems, [1, 2, 3])
-        self.assertEqual(monkeyGroup.monkeys[1].inspectedItems, [63])
-        self.assertEqual(monkeyGroup.monkeys[2].inspectedItems, [74])
+        self.assertEqual(monkeyGroup.monkeys[0].inspectedItems, 3)
+        self.assertEqual(monkeyGroup.monkeys[1].inspectedItems, 2)
+        self.assertEqual(monkeyGroup.monkeys[2].inspectedItems, 1)
         monkeyGroup.executeOnAll()
 
     def testGetMonkeyByIndex(self):
@@ -190,7 +190,42 @@ class TestDay11(unittest.TestCase):
         for monkeyString in monkeyStrings:
             monkeyGroup.addMonkey(day11.parseMonkeyObjectFromString(monkeyString))
         day11.executeOnAllXTimes(monkeyGroup)
-        self.assertEqual(101, len(monkeyGroup.monkeys[0].inspectedItems))
+        self.assertEqual(101, monkeyGroup.monkeys[0].inspectedItems)
+
+
+    def testPart2Functionality(self):
+        ioStream = open('testData.txt', 'r')
+        monkeyStrings = day11.parseMonkeyStrings(ioStream)
+        monkeyGroup = day11.MonkeyGroup()
+        for monkeyString in monkeyStrings:
+            monkeyGroup.addMonkey(day11.parseMonkeyObjectFromString(monkeyString))
+        numberOfIterations = 20
+        day11.executeOnAllXTimes(monkeyGroup, numberOfIterations, 1)
+        inspections = monkeyGroup.getInspectedCounts()
+        sortedInspections = sorted(inspections, key=lambda x: x[1], reverse=True)
+        self.assertEqual(99, monkeyGroup.monkeys[0].inspectedItems)
+        self.assertEqual(97, monkeyGroup.monkeys[1].inspectedItems)
+        self.assertEqual(8, monkeyGroup.monkeys[2].inspectedItems)
+        self.assertEqual(103, monkeyGroup.monkeys[3].inspectedItems)
+
+
+    def testPart2Functionality(self):
+        ioStream = open('data.txt', 'r')
+        monkeyStrings = day11.parseMonkeyStrings(ioStream)
+        ioStream.close()
+        monkeyGroup = day11.MonkeyGroup()
+        for monkeyString in monkeyStrings:
+            monkeyGroup.addMonkey(day11.parseMonkeyObjectFromString(monkeyString))
+        numberOfIterations = 10000
+        day11.executeOnAllXTimes(monkeyGroup, numberOfIterations)
+        inspections = monkeyGroup.getInspectedCounts()
+        sortedInspections = sorted(inspections, key=lambda x: x[1], reverse=True)
+        print(sortedInspections[0][1] * sortedInspections[1][1])
+        self.assertEqual(52166, monkeyGroup.monkeys[0].inspectedItems)
+        self.assertEqual(47830, monkeyGroup.monkeys[1].inspectedItems)
+        self.assertEqual(1938, monkeyGroup.monkeys[2].inspectedItems)
+        self.assertEqual(52013, monkeyGroup.monkeys[3].inspectedItems)
+
 
 if __name__ == '__main__':
     unittest.main()

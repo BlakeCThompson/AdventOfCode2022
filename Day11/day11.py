@@ -1,11 +1,32 @@
 from __future__ import annotations
 
+import time
 from typing import TextIO
 
 from abc import ABC
 
+import math
+
+
+def lcm(numbers):
+    # Find the LCM of two numbers
+    def lcm_helper(x, y):
+        return abs(x * y) // math.gcd(x, y)
+
+    # Find the LCM of a list of numbers recursively
+    def lcm_rec(numbers):
+        if len(numbers) == 1:
+            return numbers[0]
+        else:
+            return lcm_helper(numbers[0], lcm_rec(numbers[1:]))
+
+    return lcm_rec(numbers)
+
 
 class Test(ABC):
+    def __init__(self):
+        self.divisor = 1
+
     def testPasses(self, value) -> bool:
         return False
 
@@ -42,6 +63,14 @@ class Operation:
 class MonkeyGroup:
     def __init__(self):
         self.monkeys = []
+        self.leastCommonMultiple = 1
+
+    def getLeastCommonMultiple(self):
+        divisors = []
+        for monkey in self.monkeys:
+            divisors.append(monkey.test.divisor)
+        return lcm(divisors)
+
     def addMonkey(self, newMonkey: Monkey) -> None:
         newMonkey.monkeyGroup = self
         for monkey in self.monkeys:
@@ -50,10 +79,15 @@ class MonkeyGroup:
             if newMonkey.falseMonkeyIndex == monkey.index:
                 newMonkey.setFalseMonkey(monkey)
         self.monkeys.append(newMonkey)
+        self.leastCommonMultiple = self.getLeastCommonMultiple()
 
-    def executeOnAll(self) -> None:
+    def executeOnAll(self, reliefModifier=None) -> None:
         for monkey in self.monkeys:
-            monkey.execute()
+            if reliefModifier is None:
+                monkey.execute(self.leastCommonMultiple)
+            else:
+                print(time.asctime(), monkey.index, monkey.itemWorryLevels)
+                monkey.execute(reliefModifier)
 
     def getInspectedCounts(self) -> list:
         inspectedCounts = []
@@ -66,6 +100,7 @@ class MonkeyGroup:
             if monkey.index == index:
                 return monkey
 
+
 class Monkey:
 
     def __init__(self, index: int, items: list, operation: Operation, test: Test, trueMonkeyIndex, falseMonkeyIndex):
@@ -77,7 +112,7 @@ class Monkey:
         self.itemWorryLevels = items
         self.operation = operation
         self.test = test
-        self.inspectedItems = []
+        self.inspectedItems = 0
         self.monkeyGroup = None
 
     def addItem(self, itemValue: int) -> None:
@@ -95,13 +130,13 @@ class Monkey:
                 self.falseMonkey = monkey
                 return monkey
 
-    def execute(self) -> None:
+    def execute(self, reliefModifier=3) -> None:
         itemsCopy = self.itemWorryLevels.copy()
         for item in itemsCopy:
-            self.inspectedItems.append(item)
+            self.inspectedItems += 1
             item = self.operation.executeOperation(item)
-            reliefModifierAfterInspection = 3
-            item = item/reliefModifierAfterInspection
+
+            item = item % reliefModifier
             item = int(item)
             if self.test.testPasses(item):
                 if self.trueMonkey is None:
@@ -121,7 +156,7 @@ class Monkey:
         self.falseMonkey = monkey
 
     def getNumberOfItemsInspected(self) -> int:
-        return len(self.inspectedItems)
+        return self.inspectedItems
 
 
 def parseMonkeyStrings(fileName: TextIO):
@@ -140,10 +175,10 @@ def parseMonkeyStrings(fileName: TextIO):
 
 
 def parseMonkeyIndexFromString(trueMonkeyString: str):
-
     return readIntegerFromString(trueMonkeyString.split('onkey ')[1])
 
-def readIntegerFromString(string: str ):
+
+def readIntegerFromString(string: str):
     num_str = ""
     for char in string:
         if char.isdigit():
@@ -154,6 +189,7 @@ def readIntegerFromString(string: str ):
         return None
     else:
         return int(num_str)
+
 
 def parseMonkeyObjectFromString(monkeyString: str) -> Monkey:
     monkeyString = monkeyString.strip()
@@ -183,13 +219,20 @@ def getTopInspectingMonkeys(monkeyGroup: MonkeyGroup, topCount: int) -> list:
     # for monkeyIndex, monkey in monkeyGroup.getInspectedCounts():
 
 
-def executeOnAllXTimes(monkeyGroup: MonkeyGroup, numberOfTimes: int=20):
+def executeOnAllXTimes(monkeyGroup: MonkeyGroup, numberOfTimes: int = 20, reliefModifier=None):
     for iteration in range(numberOfTimes):
-        monkeyGroup.executeOnAll()
+        if iteration % 100 == 0:
+            print(iteration, monkeyGroup.getInspectedCounts())
+        if reliefModifier is None:
+            monkeyGroup.executeOnAll()
+        else:
+            monkeyGroup.executeOnAll(reliefModifier)
+
 
 def part1(fileName):
     ioStream = open(fileName, 'r')
     monkeyStrings = parseMonkeyStrings(ioStream)
+    ioStream.close()
     monkeyGroup = MonkeyGroup()
     for monkeyString in monkeyStrings:
         monkeyGroup.addMonkey(parseMonkeyObjectFromString(monkeyString))
@@ -198,9 +241,25 @@ def part1(fileName):
     inspections = monkeyGroup.getInspectedCounts()
     inspections = sorted(inspections, key=lambda x: x[1], reverse=True)
     print('top 2 by inspections:', inspections[0], inspections[1])
-    print('monkey business level = ' + str( inspections[0][1]*inspections[1][1]))
+    print('monkey business level = ' + str(inspections[0][1] * inspections[1][1]))
 
-# file = 'Day11/testData.txt'
-file = 'Day11/data.txt'
-part1(file)
+
+def part2(fileName):
+    ioStream = open(fileName, 'r')
+    monkeyStrings = parseMonkeyStrings(ioStream)
+    ioStream.close()
+    monkeyGroup = MonkeyGroup()
+    for monkeyString in monkeyStrings:
+        monkeyGroup.addMonkey(parseMonkeyObjectFromString(monkeyString))
+    numberOfIterations = 10000
+    executeOnAllXTimes(monkeyGroup, numberOfIterations, 1)
+    inspections = monkeyGroup.getInspectedCounts()
+    inspections = sorted(inspections, key=lambda x: x[1], reverse=True)
+    print('top 2 by inspections:', inspections[0], inspections[1])
+    print('monkey business level = ' + str(inspections[0][1] * inspections[1][1]))
+
+
+file = 'Day11/testData.txt'
+# file = 'Day11/data.txt'
+# part1(file)
 # part2(file)
