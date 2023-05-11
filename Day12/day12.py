@@ -64,6 +64,16 @@ def parseGrid(fileName):
     return rows
 
 
+def getBestMove(moveOptions, end):
+    closestOption = None
+    closestDistance = float('inf')
+    for moveOption in moveOptions:
+        optionDistance = getDistanceBetweenCoordinates(moveOption, end)
+        if closestDistance > optionDistance:
+            closestDistance = optionDistance
+            closestOption = moveOption
+    return closestOption
+
 def getEnd(grid):
     for rowIndex, row in enumerate(grid):
         for colIndex, col in enumerate(row):

@@ -60,5 +60,21 @@ class Day12Tests(unittest.TestCase):
         moveOptions = day12.getMoveOptions(grid, 2, 6)
         self.assertListEqual(moveOptions, [(1, 6), (3, 6)])
 
+    def testGetBestOption(self):
+        grid = [
+            ['S', 'a', 'b', 'q', 'p', 'o', 'n', 'm'],
+            ['a', 'b', 'c', 'r', 'y', 'x', 'x', 'l'],
+            ['a', 'c', 'c', 's', 'z', 'E', 'x', 'k'],
+            ['a', 'c', 'c', 't', 'u', 'v', 'w', 'j'],
+            ['a', 'b', 'd', 'e', 'f', 'g', 'h', 'i']
+        ]
+        location = (2, 1)
+        moveOptions = [(2, 0), (1, 1), (2, 2), (3, 1)]
+        expectedBestMove = (2, 2)
+        end = (2, 5)
+        bestMove = day12.getBestMove(moveOptions, end)
+        self.assertEqual(expectedBestMove, bestMove)
+
+
 if __name__ == '__main__':
     unittest.main()
