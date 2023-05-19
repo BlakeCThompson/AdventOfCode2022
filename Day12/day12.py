@@ -22,9 +22,33 @@ class BreadthFirstSearcher:
                 colNumber += 1
             self.distanceGraph.append(newRow)
             rowNumber += 1
-        self.bestPath = []
 
         self.pathFound = False
+
+    def getAllAtHeight(self, heightLevel: chr):
+        matchingHeights = []
+        rowNum = 0
+        for row in self.graph:
+            colNum = 0
+            for colValue in row:
+                if colValue == heightLevel:
+                    matchingHeights.append((rowNum, colNum))
+                colNum += 1
+            rowNum += 1
+        return matchingHeights
+
+    def setStartPoints(self, heightLevel):
+        rowNum = 0
+        for row in self.graph:
+            colNum = 0
+            for colValue in row:
+                if colValue == heightLevel:
+                    self.visited.append((rowNum, colNum))
+                    self.freshlyVisited.append((rowNum, colNum))
+                    self.distanceGraph[rowNum][colNum] = 0
+                colNum += 1
+            rowNum += 1
+
 
     def searchOneStepOut(self):
         freshlyVisitedCopy = self.freshlyVisited.copy()
@@ -157,6 +181,14 @@ def solvePart1(fileName: str):
         breadthFirstSearcher.searchOneStepOut()
     return breadthFirstSearcher.distanceGraph[breadthFirstSearcher.end[0]][breadthFirstSearcher.end[1]]
 
+
+def solvePart2(fileName: str):
+    grid = parseGrid(fileName)
+    breadthFirstSearcher = BreadthFirstSearcher(grid)
+    breadthFirstSearcher.setStartPoints('a')
+    while not breadthFirstSearcher.pathFound:
+        breadthFirstSearcher.searchOneStepOut()
+    return breadthFirstSearcher.distanceGraph[breadthFirstSearcher.end[0]][breadthFirstSearcher.end[1]]
 
 def part1(fileName: str):
     print('shortest length to end:', solvePart1(fileName))

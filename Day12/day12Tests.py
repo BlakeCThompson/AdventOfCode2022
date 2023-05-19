@@ -138,8 +138,51 @@ class Day12Tests(unittest.TestCase):
             breadthFirstSearcher.searchOneStepOut()
         self.assertEqual(breadthFirstSearcher.distanceGraph[breadthFirstSearcher.end[0]][breadthFirstSearcher.end[1]], 31)
 
+    def testChooseAnotherStartPoint(self):
+        grid = [
+            ['S', 'a', 'b', 'q', 'p', 'o', 'n', 'm'],
+            ['a', 'b', 'c', 'r', 'y', 'x', 'x', 'l'],
+            ['a', 'c', 'c', 's', 'z', 'E', 'x', 'k'],
+            ['a', 'c', 'c', 't', 'u', 'v', 'w', 'j'],
+            ['a', 'b', 'd', 'e', 'f', 'g', 'h', 'i']
+        ]
+        breadthFirstSearcher = day12.BreadthFirstSearcher(grid)
+        self.assertEqual(breadthFirstSearcher.distanceGraph[0][0], 0)
+        while not breadthFirstSearcher.pathFound:
+            breadthFirstSearcher.searchOneStepOut()
+        self.assertEqual(breadthFirstSearcher.distanceGraph[breadthFirstSearcher.end[0]][breadthFirstSearcher.end[1]], 31)
+        breadthFirstSearcher = day12.BreadthFirstSearcher(grid)
+        startPoints = breadthFirstSearcher.getAllAtHeight('a')
+        expectedStartPoints = [(0, 1), (1, 0), (2, 0), (3, 0), (4, 0)]
+        for startPoint in expectedStartPoints:
+            self.assertIn(startPoint, startPoints)
+
+
+    def testFind(self):
+        grid = [
+            ['S', 'a', 'b', 'q', 'p', 'o', 'n', 'm'],
+            ['a', 'b', 'c', 'r', 'y', 'x', 'x', 'l'],
+            ['a', 'c', 'c', 's', 'z', 'E', 'x', 'k'],
+            ['a', 'c', 'c', 't', 'u', 'v', 'w', 'j'],
+            ['a', 'b', 'd', 'e', 'f', 'g', 'h', 'i']
+        ]
+        breadthFirstSearcher = day12.BreadthFirstSearcher(grid)
+        self.assertEqual(breadthFirstSearcher.distanceGraph[0][0], 0)
+        while not breadthFirstSearcher.pathFound:
+            breadthFirstSearcher.searchOneStepOut()
+        self.assertEqual(breadthFirstSearcher.distanceGraph[breadthFirstSearcher.end[0]][breadthFirstSearcher.end[1]], 31)
+        breadthFirstSearcher = day12.BreadthFirstSearcher(grid)
+        breadthFirstSearcher.setStartPoints('a')
+        while not breadthFirstSearcher.pathFound:
+            breadthFirstSearcher.searchOneStepOut()
+        self.assertEqual(breadthFirstSearcher.distanceGraph[breadthFirstSearcher.end[0]][breadthFirstSearcher.end[1]], 29)
+
+
     def testSolvePart1(self):
         self.assertEqual(day12.solvePart1('data.txt'), 361)
+
+    def testSolvePart2(self):
+        self.assertEqual(day12.solvePart2('data.txt'), 354)
 
 
 if __name__ == '__main__':
